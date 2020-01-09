@@ -1,0 +1,13 @@
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\bin\Debug\netcoreapp3.1\SamuraiApp.Data.deps.json
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\bin\Debug\netcoreapp3.1\SamuraiApp.Data.runtimeconfig.json
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\bin\Debug\netcoreapp3.1\SamuraiApp.Data.runtimeconfig.dev.json
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\bin\Debug\netcoreapp3.1\SamuraiApp.Data.dll
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\bin\Debug\netcoreapp3.1\SamuraiApp.Data.pdb
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\bin\Debug\netcoreapp3.1\SamuraiApp.Domain.dll
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\bin\Debug\netcoreapp3.1\SamuraiApp.Domain.pdb
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\obj\Debug\netcoreapp3.1\SamuraiApp.Data.csprojAssemblyReference.cache
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\obj\Debug\netcoreapp3.1\SamuraiApp.Data.AssemblyInfoInputs.cache
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\obj\Debug\netcoreapp3.1\SamuraiApp.Data.AssemblyInfo.cs
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\obj\Debug\netcoreapp3.1\SamuraiApp.Data.csproj.CopyComplete
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\obj\Debug\netcoreapp3.1\SamuraiApp.Data.dll
+C:\Users\jnegron\git\training\SamuraiAppCore30\SamuraiApp.Data\obj\Debug\netcoreapp3.1\SamuraiApp.Data.pdb
