@@ -21,7 +21,73 @@ namespace SamurayApp.UI
             //RetrieveAndUpdateMultipleSamurais();
             //MultipleDatabseOperations();
             //InsertBattle();
+            //QueryAndUpdateBattle_Disconnected();
+            //AddSomeMoreSamurais();
+            //DeleteWhileTracked();
+            DeleteWhileNotTracked();
+            //DeleteMany();
+            //DeleteUsingId(4);
         }
+
+        private static void DeleteUsingId(int samuraiId)
+        {
+            //This is stil a two-trip operation :(
+            var samurai = _context.Samurais.Find(samuraiId);
+            _context.Remove(samurai);
+            _context.SaveChanges();
+            //alternate: call a stored procedure for a one-trip delete operation!
+            //_context.Database.ExecuteSqlCommand("exec [your_sproc_name] {0}", samuraiId);
+        }
+
+        private static void AddSomeMoreSamurais()
+        {
+            _context.AddRange(
+               new Samurai { Name = "Kambei Shimada" },
+               new Samurai { Name = "Shichirōji " },
+               new Samurai { Name = "Katsushirō Okamoto" },
+               new Samurai { Name = "Heihachi Hayashida" },
+               new Samurai { Name = "Kyūzō" },
+               new Samurai { Name = "Gorōbei Katayama" }
+             );
+            _context.SaveChanges();
+        }
+
+        private static void DeleteMany()
+        {
+            var samurais = _context.Samurais.Where(s => s.Name.Contains("ō"));
+            _context.Samurais.RemoveRange(samurais);
+            //alternate: _context.RemoveRange(samurais);
+            
+            //Modified from original to show rows affected
+            var rowsAffected = _context.SaveChanges();
+            Console.WriteLine($"Rows affected: {rowsAffected}");
+        }
+
+        private static void DeleteWhileTracked()
+        {
+            var samurai = _context.Samurais.FirstOrDefault(s => s.Name == "Shichirōji");
+            _context.Samurais.Remove(samurai);
+            //alternates:
+            // _context.Remove(samurai);
+            // _context.Entry(samurai).State=EntityState.Deleted;
+            // _context.Samurais.Remove(_context.Samurais.Find(1));
+
+            //Modified from original to show rows affected
+            var rowsAffected = _context.SaveChanges();
+            Console.WriteLine($"Rows affected: {rowsAffected}");
+        }
+
+        private static void DeleteWhileNotTracked()
+        {
+            var samurai = _context.Samurais.FirstOrDefault(s => s.Name == "Heihachi Hayashida");
+            using (var contextNewAppInstance = new SamuraiContext())
+            {
+                contextNewAppInstance.Samurais.Remove(samurai);
+                //contextNewAppInstance.Entry(samurai).State=EntityState.Deleted;
+                contextNewAppInstance.SaveChanges();
+            }
+        }
+
         private static void QueryAndUpdateBattle_Disconnected()
         {
             //Modified from training course to show data of updated object for confirmation.
