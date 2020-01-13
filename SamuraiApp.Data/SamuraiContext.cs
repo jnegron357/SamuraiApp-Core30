@@ -19,6 +19,9 @@ namespace SamuraiApp.Data
         public DbSet<Samurai> Samurais { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Battle> Battles { get; set; }
+        public DbSet<Clan> Clans { get; set; }
+        //To avoid having a publicly accessible Entity, use the modelBuilder.Entity<[entity-type]>().ToTable("[table-name]") extention in OnModelCreating.
+        //public DbSet<Horse> Horses {get;set;}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -32,6 +35,7 @@ namespace SamuraiApp.Data
         {
             modelBuilder.Entity<SamuraiBattle>()
                 .HasKey(s => new { s.SamuraiId, s.BattleId });
+            modelBuilder.Entity<Horse>().ToTable("Horses");
 
             base.OnModelCreating(modelBuilder);
         }
