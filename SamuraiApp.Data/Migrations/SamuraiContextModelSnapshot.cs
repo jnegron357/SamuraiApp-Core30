@@ -40,6 +40,42 @@ namespace SamuraiApp.Data.Migrations
                     b.ToTable("Battles");
                 });
 
+            modelBuilder.Entity("SamuraiApp.Domain.Clan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClanName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clans");
+                });
+
+            modelBuilder.Entity("SamuraiApp.Domain.Horse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SamuraiId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SamuraiId")
+                        .IsUnique();
+
+                    b.ToTable("Horses");
+                });
+
             modelBuilder.Entity("SamuraiApp.Domain.Quote", b =>
                 {
                     b.Property<int>("Id")
@@ -70,10 +106,15 @@ namespace SamuraiApp.Data.Migrations
                     b.Property<int>("BattleId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ClanId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClanId");
 
                     b.ToTable("Samurais");
                 });
@@ -114,6 +155,15 @@ namespace SamuraiApp.Data.Migrations
                     b.ToTable("SecretIdentity");
                 });
 
+            modelBuilder.Entity("SamuraiApp.Domain.Horse", b =>
+                {
+                    b.HasOne("SamuraiApp.Domain.Samurai", null)
+                        .WithOne("Hourse")
+                        .HasForeignKey("SamuraiApp.Domain.Horse", "SamuraiId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SamuraiApp.Domain.Quote", b =>
                 {
                     b.HasOne("SamuraiApp.Domain.Samurai", "Samurai")
@@ -121,6 +171,13 @@ namespace SamuraiApp.Data.Migrations
                         .HasForeignKey("SamuraiId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SamuraiApp.Domain.Samurai", b =>
+                {
+                    b.HasOne("SamuraiApp.Domain.Clan", "Clan")
+                        .WithMany()
+                        .HasForeignKey("ClanId");
                 });
 
             modelBuilder.Entity("SamuraiApp.Domain.SamuraiBattle", b =>
