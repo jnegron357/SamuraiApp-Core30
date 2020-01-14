@@ -41,7 +41,47 @@ namespace SamurayApp.UI
             //ProjectSamuraisWithQuotesFiltered();
             //ProjectSomeProperties();
             //ChildFilteringWithRelatedData();
-            ModifyingRelatedDataWhenTracked();
+            //ModifyingRelatedDataWhenTracked();
+            //InsertVariousTypes();
+            //QueryAndUpdateBattle_Disconnected();
+            QueryAndUpdateBattle_Disconnected_AsNoTracking();
+        }
+
+        private static void QueryFilters()
+        {
+            var name = "Sampson";
+            //var samurais = _context.Samurais.Where(s => s.Name == "Sampson").ToList();
+
+            //Use find for getting an entity by ID. Benefit is that EF will pull it from memory if it is bieng tracked already.
+            var samurai = _context.Samurais.Find(2);
+            Console.WriteLine(samurai.Name);
+
+            //Use the new Like function:
+            var filter = "J%";
+            var samurais = _context.Samurais.Where(s => EF.Functions.Like(s.Name, filter)).ToList();
+            samurais.ForEach(x => Console.WriteLine(x.Name));
+
+            //Use FirstOrDefault with lambda
+            var samurai2 = _context.Samurais.FirstOrDefault(x => x.Name == name);
+            Console.WriteLine(samurai2.Name);
+
+            //Use LastOrDefault with lambda, requires OrderBy to called first!
+            var last = _context.Samurais.OrderBy(s => s.Id).LastOrDefault(s => s.Name == name);
+            Console.WriteLine(last.Name);
+            
+            //the following will throw an exception:
+            //var lastNoOrder= _context.Samurais.LastOrDefault(s => s.Name == name);
+
+            samurais.ForEach(x => Console.WriteLine(x.Name));
+        }
+
+        private static void InsertVariousTypes()
+        {
+            var samurai = new Samurai { Name = "KikuchioSan" };
+            var clan = new Clan { ClanName = "Galactic Clan" };
+            _context.AddRange(samurai, clan);
+            _context.SaveChanges();
+            Console.WriteLine($"Samurai id: {samurai.Id}, Clan Id: {clan.Id}");
         }
 
         private static void ModifyingRelatedDataWhenTracked()
@@ -69,7 +109,7 @@ namespace SamurayApp.UI
             var samurais = _context.Samurais
                 .Where(s => s.Quotes.Any(q => q.Text.Contains("happy")))
                 .ToList();
-            samurais.ForEach(x => ShowSamuraiWithQuotes(x));
+            samurais.ForEach(x => DisplaySamuraiName(x));
         }
 
         private static void ChildFilteringWithRelatedData()
@@ -89,10 +129,11 @@ namespace SamurayApp.UI
             }
         }
 
-        private static void ShowSamuraiWithQuotes(Samurai samurai)
+        private static void DisplaySamuraiName(Samurai samurai, bool showQuotes = false)
         {
             Console.WriteLine(samurai.Name);
-            samurai.Quotes.ForEach(x => Console.WriteLine(x.Text));
+            if(showQuotes && samurai.Quotes.Any()) 
+                samurai.Quotes.ForEach(x => Console.WriteLine(x.Text));
         }
 
         private static void ProjectSamuraisWithQuotes()
@@ -195,9 +236,9 @@ namespace SamurayApp.UI
             {
                 Name = "Kambei Shimada",
                 Quotes = new List<Quote>
-                               {
-                                 new Quote {Text = "I've come to save you"}
-                               }
+                {
+                    new Quote {Text = "I've come to save you"}
+                }
             };
             _context.Samurais.Add(samurai);
             _context.SaveChanges();
@@ -278,6 +319,23 @@ namespace SamurayApp.UI
             }
         }
 
+        private static void QueryAndUpdateBattle_Disconnected_AsNoTracking()
+        {
+            //In desconnected scenarios, ensure that the DB context doesn't create entity entry objects to track the results of the query. 
+            //This will improve performance due to the fact that EF Core is not using any tracking objects during it's operation.
+            //NOTE: AsNoTracking() returns a query not a DbSet!
+            var battle = _context.Battles.AsNoTracking().FirstOrDefault();
+            battle.EndDate = new DateTime(1560, 06, 30);
+            using (var newContextInstance = new SamuraiContext())
+            {
+                newContextInstance.Battles.Update(battle);
+                newContextInstance.SaveChanges();
+                Console.WriteLine("Battle ID:" + battle.Id);
+                Console.WriteLine("New battle End Date: " + battle.EndDate.ToShortDateString());
+            }
+        }
+
+
         private static void InsertBattle()
         {
             //Modified from training course to show data of newly inserted object for confirmation.
@@ -321,6 +379,12 @@ namespace SamurayApp.UI
             GetAllSamurai();
         }
 
+        private static void RetrieveAndUpdateMultipleSamurais_UsingSkipAndTake()
+        {
+            var samurais = _context.Samurais.Skip(1).Take(4).ToList();
+            samurais.ForEach(s => s.Name += "San");
+            _context.SaveChanges();
+        }
 
         private static void GetAllSamurai()
         {
