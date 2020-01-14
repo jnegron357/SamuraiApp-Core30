@@ -25,10 +25,13 @@ namespace SamuraiApp.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            var connString = "Server=(localdb)\\mssqllocaldb;Database=SamuraiAppData;Trusted_Connection=True;MultipleActiveResultSets=True";
             optionsBuilder
                 .UseLoggerFactory(MyLoggerFactory)
                 .EnableSensitiveDataLogging()//This will reveal the data that was inserted or updated to the DB. Use this only in development.
-                .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SamuraiAppData;Trusted_Connection=True;MultipleActiveResultSets=True");
+                .UseSqlServer(connString);
+                //Example for setting batch size
+                //.UseSqlServer(connString, options => options.MaxBatchSize(150));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
