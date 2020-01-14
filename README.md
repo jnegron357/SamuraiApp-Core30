@@ -1,4 +1,4 @@
-# SamuraiApp-Core30
+# About SamuraiApp-Core30
 This is a project created by Julie Lerman for Pluralsight used in her course Entity Framwork Core 2: Getting Started. Except I created it using Visual Studio 2019 and .NET Core 3.1. UPDATE: Julie Lerman has released a 3.1 version of this course and I am now using code examples from that course in addition to what I've already added from her previous course.
 
 # About the console app
