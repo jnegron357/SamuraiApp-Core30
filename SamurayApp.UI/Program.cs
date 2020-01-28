@@ -4,12 +4,15 @@ using SamuraiApp.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
+using SamuraiApp.UI;
 
 namespace SamurayApp.UI
 {
     class Program
     {
         private static SamuraiContext _context = new SamuraiContext();
+        private static readonly RelatedData relatedData = new RelatedData(_context);
+        private static readonly SqlRawData sqlRawData = new SqlRawData(_context);
 
         static void Main()
         {
@@ -44,7 +47,13 @@ namespace SamurayApp.UI
             //ModifyingRelatedDataWhenTracked();
             //InsertVariousTypes();
             //QueryAndUpdateBattle_Disconnected();
-            QueryAndUpdateBattle_Disconnected_AsNoTracking();
+            //QueryAndUpdateBattle_Disconnected_AsNoTracking();
+            //relatedData.ProjectSamuraisWithQuotes();
+            //relatedData.ProjectSamuraisWithQuotes_filtered();
+            //relatedData.ProjectSamuraisWithQuotes_filtered(true);
+            //sqlRawData.QueryUsingRawSql();
+            //sqlRawData.QueryUsingRawSql_WithRelatedData();
+            sqlRawData.QueryUsingRawSql_Interpolated();
         }
 
         private static void QueryFilters()
@@ -109,7 +118,7 @@ namespace SamurayApp.UI
             var samurais = _context.Samurais
                 .Where(s => s.Quotes.Any(q => q.Text.Contains("happy")))
                 .ToList();
-            samurais.ForEach(x => DisplaySamuraiName(x));
+            samurais.ForEach(x => DisplaySamuraiName(x, true));
         }
 
         private static void ChildFilteringWithRelatedData()
@@ -121,6 +130,7 @@ namespace SamurayApp.UI
                         Quotes = x.Quotes.Where(q => q.Text.Contains("happy")).ToList() 
                     })
                 .ToList();
+
             //show me the results
             foreach (var item in samurais)
             {
